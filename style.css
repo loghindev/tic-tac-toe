@@ -57,7 +57,7 @@ body {
   border-width: 2px 0 2px 2px;
 }
 .gameboard .cell:nth-child(7) {
-  border-width: 0 2px 0 0;
+  border-width: 2px 2px 0 0;
 }
 .gameboard .cell:nth-child(8) {
   border-width: 2px 2px 0 2px;
