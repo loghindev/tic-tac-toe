@@ -13,6 +13,7 @@ const player2 = player1 === "X" ? "0" : "X";
 let current = [player1, player2][Math.floor(Math.random() * 2)];
 
 let gameOver = false;
+let moves = 0;
 
 document.addEventListener("DOMContentLoaded", () => {
   generateGameboard();
@@ -34,6 +35,8 @@ function generateGameboard() {
 function setCell(event) {
   if (event.target.textContent !== "" || gameOver) return;
   event.target.textContent = current;
+  ++moves;
+  checkWinner();
   updateCurrent();
 }
 
@@ -43,8 +46,12 @@ function loadUsernames() {
 }
 
 function updateCurrent() {
-  current === player1 ? (current = player2) : (current = player1);
-  whichTurn(current);
+  if (!gameOver) {
+    current === player1 ? (current = player2) : (current = player1);
+    whichTurn(current);
+  } else {
+    whichTurn("END");
+  }
 }
 
 function whichTurn(subject) {
@@ -54,5 +61,73 @@ function whichTurn(subject) {
   } else if (subject === player2) {
     p2Spinner.classList.replace("d-none", "thinking");
     p1Spinner.classList.replace("thinking", "d-none");
+  } else if (subject === "END") {
+    // just get rid of both spinners
+    [p1Spinner, p2Spinner].forEach((spinner) =>
+      spinner.classList.replace("thinking", "d-none")
+    );
   }
+}
+
+function checkWinner() {
+  const cells = document.querySelectorAll(".gameboard .cell");
+  const winnerCombos = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+  for (let array of winnerCombos) {
+    if (
+      cells[array[0]].textContent === cells[array[1]].textContent &&
+      cells[array[1]].textContent === cells[array[2]].textContent &&
+      cells[array[0]].textContent !== ""
+    ) {
+      console.log("Check");
+      gameOver = true;
+      updateScore(cells[array[0]].textContent);
+      return setTimeout(restart, 2500);
+    }
+  }
+  if (moves === THREE * THREE && !gameOver) {
+    gameOver = true;
+    updateScore(tieScore);
+    setTimeout(restart, 2500);
+  }
+}
+
+function blink(text) {
+  text.classList.add("blink");
+  text.addEventListener("animationend", () => {
+    text.classList.remove("blink");
+  });
+}
+
+function increase(score) {
+  let value = parseInt(score.textContent);
+  score.textContent = (++value).toString();
+  blink(score);
+}
+
+function updateScore(winner) {
+  if (winner === player1) {
+    increase(p1Score);
+  } else if (winner === player2) {
+    increase(p2Score);
+  } else {
+    increase(tieScore);
+  }
+}
+
+function restart() {
+  const usedCells = Array.from(
+    document.querySelectorAll(".gameboard .cell")
+  ).filter((cell) => cell.textContent !== "");
+  usedCells.forEach((cell) => (cell.textContent = ""));
+  gameOver = false;
+  moves = 0;
 }

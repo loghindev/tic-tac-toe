@@ -37,7 +37,8 @@ body {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  font-size: 140px;
+  font-size: 150px;
+  color: #ababa1;
   border: 2px solid white;
   cursor: pointer;
 }
@@ -103,9 +104,19 @@ body {
 .thinking {
   animation: spin 2.4s linear infinite;
 }
+.blink {
+  animation: blink 0.4s ease;
+  animation-iteration-count: 4;
+}
 
 @keyframes spin {
   to {
     transform: rotateZ(360deg);
+  }
+}
+@keyframes blink {
+  50% {
+    opacity: 0;
+    transform: scale(0.8);
   }
 }
