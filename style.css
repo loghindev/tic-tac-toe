@@ -1,7 +1,12 @@
 @font-face {
-  font-family: "Comic-Regular";
-  src: url("./fonts/ComicRelief-Regular.ttf");
+  font-family: "Raleway-Regular";
+  src: url("./fonts/Raleway-Regular.ttf");
 }
+@font-face {
+  font-family: "Raleway-Medium";
+  src: url("./fonts/Raleway-Medium.ttf");
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -13,6 +18,7 @@ body {
   height: 100vh;
   background-color: #111;
   color: white;
+  font-family: "Raleway-Regular";
 }
 .container {
   width: 450px;
@@ -30,7 +36,7 @@ body {
   flex-wrap: wrap;
 }
 .gameboard .cell {
-  font-family: "Comic-Regular";
+  font-family: "Raleway-Medium";
   width: 150px;
   height: 150px;
   display: flex;
