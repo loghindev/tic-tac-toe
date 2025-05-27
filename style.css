@@ -1,12 +1,11 @@
-@font-face {
+/* @font-face {
   font-family: "Raleway-Regular";
   src: url("./fonts/Raleway-Regular.ttf");
 }
 @font-face {
   font-family: "Raleway-Medium";
   src: url("./fonts/Raleway-Medium.ttf");
-}
-
+} */
 * {
   margin: 0;
   padding: 0;
