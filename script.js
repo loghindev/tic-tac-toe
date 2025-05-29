@@ -6,6 +6,8 @@ const p2Spinner = document.querySelector(".scoreboard .player-2 .spinner");
 const p1Score = document.querySelector(".scoreboard .player-1 .value");
 const p2Score = document.querySelector(".scoreboard .player-2 .value");
 const tieScore = document.querySelector(".scoreboard .tie .value");
+const toggleOpponentBtn = document.querySelector(".toggle-opponent p");
+const bulb = document.querySelector(".bulb");
 
 const THREE = 3;
 const player1 = ["X", "O"][Math.floor(Math.random() * 2)];
@@ -19,6 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
   generateGameboard();
   loadUsernames();
   whichTurn(current);
+  handleOpponentToggler();
 });
 
 function generateGameboard() {
@@ -130,4 +133,10 @@ function restart() {
   usedCells.forEach((cell) => (cell.textContent = ""));
   gameOver = false;
   moves = 0;
+}
+
+function handleOpponentToggler() {
+  toggleOpponentBtn.addEventListener("click", () => {
+    bulb.classList.toggle("d-none");
+  });
 }

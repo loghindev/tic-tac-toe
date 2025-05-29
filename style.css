@@ -19,6 +19,17 @@ body {
   color: white;
   font-family: "Raleway-Regular";
 }
+header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+.toggle-opponent,
+.audio-icons-wrapper {
+  cursor: pointer;
+}
 .container {
   width: 450px;
   height: 450px;

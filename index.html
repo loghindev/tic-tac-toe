@@ -7,35 +7,72 @@
     <link rel="stylesheet" type="text/css" href="./style.css" />
   </head>
   <body>
-    <div class="container">
-      <div class="gameboard">
-        <!-- add on fly -->
+    <header>
+      <div class="toggle-opponent">
+        <p>Computer <span class="bulb">💡</span></p>
       </div>
-      <div class="scoreboard">
-        <div class="player-1">
-          <div class="head">
-            <p class="name"></p>
-            <div class="placeholder">
-              <div class="spinner d-none"></div>
-            </div>
-          </div>
-          <p class="value">0</p>
+      <div class="audio-icons-wrapper">
+        <!-- unmuted -->
+        <svg
+          id="unmuted"
+          xmlns="http://www.w3.org/2000/svg"
+          width="42"
+          height="42"
+          fill="currentColor"
+          class="bi bi-volume-down-fill"
+          viewBox="0 0 16 16"
+        >
+          <path
+            d="M9 4a.5.5 0 0 0-.812-.39L5.825 5.5H3.5A.5.5 0 0 0 3 6v4a.5.5 0 0 0 .5.5h2.325l2.363 1.89A.5.5 0 0 0 9 12zm3.025 4a4.5 4.5 0 0 1-1.318 3.182L10 10.475A3.5 3.5 0 0 0 11.025 8 3.5 3.5 0 0 0 10 5.525l.707-.707A4.5 4.5 0 0 1 12.025 8"
+          />
+        </svg>
+        <!-- muted -->
+        <svg
+          id="muted"
+          xmlns="http://www.w3.org/2000/svg"
+          width="42"
+          height="42"
+          fill="currentColor"
+          class="bi bi-volume-mute-fill d-none"
+          viewBox="0 0 16 16"
+        >
+          <path
+            d="M6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825 10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06m7.137 2.096a.5.5 0 0 1 0 .708L12.207 8l1.647 1.646a.5.5 0 0 1-.708.708L11.5 8.707l-1.646 1.647a.5.5 0 0 1-.708-.708L10.793 8 9.146 6.354a.5.5 0 1 1 .708-.708L11.5 7.293l1.646-1.647a.5.5 0 0 1 .708 0"
+          />
+        </svg>
+      </div>
+    </header>
+    <main>
+      <div class="container">
+        <div class="gameboard">
+          <!-- add on fly -->
         </div>
-        <div class="tie">
-          <p class="name">Tie</p>
-          <p class="value">0</p>
-        </div>
-        <div class="player-2">
-          <div class="head">
-            <p class="name"></p>
-            <div class="placeholder">
-              <div class="spinner d-none"></div>
+        <div class="scoreboard">
+          <div class="player-1">
+            <div class="head">
+              <p class="name"></p>
+              <div class="placeholder">
+                <div class="spinner d-none"></div>
+              </div>
             </div>
+            <p class="value">0</p>
           </div>
-          <p class="value">0</p>
+          <div class="tie">
+            <p class="name">Tie</p>
+            <p class="value">0</p>
+          </div>
+          <div class="player-2">
+            <div class="head">
+              <p class="name"></p>
+              <div class="placeholder">
+                <div class="spinner d-none"></div>
+              </div>
+            </div>
+            <p class="value">0</p>
+          </div>
         </div>
       </div>
-    </div>
+    </main>
     <script src="./script.js"></script>
   </body>
 </html>
