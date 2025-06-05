@@ -8,6 +8,9 @@ const p2Score = document.querySelector(".scoreboard .player-2 .value");
 const tieScore = document.querySelector(".scoreboard .tie .value");
 const toggleOpponentBtn = document.querySelector(".toggle-opponent p");
 const bulb = document.querySelector(".bulb");
+const audioContainer = document.querySelector(".audio-icons-wrapper");
+const unmuted = document.querySelector("#unmuted");
+const muted = document.querySelector("#muted");
 
 const THREE = 3;
 const player1 = ["X", "O"][Math.floor(Math.random() * 2)];
@@ -22,6 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
   loadUsernames();
   whichTurn(current);
   handleOpponentToggler();
+  handleAudioSettings();
 });
 
 function generateGameboard() {
@@ -138,5 +142,11 @@ function restart() {
 function handleOpponentToggler() {
   toggleOpponentBtn.addEventListener("click", () => {
     bulb.classList.toggle("d-none");
+  });
+}
+
+function handleAudioSettings() {
+  audioContainer.addEventListener("click", () => {
+    [unmuted, muted].forEach((icon) => icon.classList.toggle("d-none"));
   });
 }
