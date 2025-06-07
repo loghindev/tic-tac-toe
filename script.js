@@ -19,8 +19,12 @@ let current = [player1, player2][Math.floor(Math.random() * 2)];
 
 let gameOver = false;
 let moves = 0;
+let botIsAwake = localStorage.getItem("awake") === "true" ? true : false;
+console.log(localStorage);
+console.log("BotIsAwake", botIsAwake);
 
 document.addEventListener("DOMContentLoaded", () => {
+  botIsAwake ? bulb.classList.remove("d-none") : bulb.classList.add("d-none");
   generateGameboard();
   loadUsernames();
   whichTurn(current);
@@ -41,24 +45,24 @@ function generateGameboard() {
 
 function setCell(event) {
   if (event.target.textContent !== "" || gameOver) return;
-  event.target.textContent = current;
   ++moves;
+  event.target.textContent = current;
   checkWinner();
   updateCurrent();
 }
 
 function loadUsernames() {
   p1Name.textContent = `Player 1 (${player1})`;
+  if (botIsAwake) {
+    return (p2Name.textContent = `Computer (${player2})`);
+  }
   p2Name.textContent = `Player 2 (${player2})`;
 }
 
 function updateCurrent() {
-  if (!gameOver) {
-    current === player1 ? (current = player2) : (current = player1);
-    whichTurn(current);
-  } else {
-    whichTurn("END");
-  }
+  if (gameOver) return whichTurn("END");
+  current === player1 ? (current = player2) : (current = player1);
+  whichTurn(current);
 }
 
 function whichTurn(subject) {
@@ -94,7 +98,6 @@ function checkWinner() {
       cells[array[1]].textContent === cells[array[2]].textContent &&
       cells[array[0]].textContent !== ""
     ) {
-      console.log("Check");
       gameOver = true;
       updateScore(cells[array[0]].textContent);
       return setTimeout(restart, 2500);
@@ -137,11 +140,16 @@ function restart() {
   usedCells.forEach((cell) => (cell.textContent = ""));
   gameOver = false;
   moves = 0;
+  current = [player1, player2][Math.floor(Math.random() * 2)];
+  whichTurn(current);
 }
 
 function handleOpponentToggler() {
   toggleOpponentBtn.addEventListener("click", () => {
     bulb.classList.toggle("d-none");
+    botIsAwake = !botIsAwake;
+    localStorage.setItem("awake", botIsAwake);
+    loadUsernames();
   });
 }
 
@@ -149,4 +157,11 @@ function handleAudioSettings() {
   audioContainer.addEventListener("click", () => {
     [unmuted, muted].forEach((icon) => icon.classList.toggle("d-none"));
   });
+}
+
+function chooseCell() {
+  const availableCells = Array.from(
+    document.querySelectorAll(".gameboard .cell")
+  ).filter((cell) => cell.textContent === "");
+  return availableCells[Math.floor(Math.random() * availableCells.length)];
 }
