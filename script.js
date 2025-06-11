@@ -13,15 +13,18 @@ const unmuted = document.querySelector("#unmuted");
 const muted = document.querySelector("#muted");
 
 const THREE = 3;
+const restartDelay = 2500;
 const player1 = ["X", "O"][Math.floor(Math.random() * 2)];
 const player2 = player1 === "X" ? "0" : "X";
 let current = [player1, player2][Math.floor(Math.random() * 2)];
 
+let thinking = false;
 let gameOver = false;
 let moves = 0;
 let botIsAwake = localStorage.getItem("awake") === "true" ? true : false;
-console.log(localStorage);
-console.log("BotIsAwake", botIsAwake);
+// console.log(localStorage.getItem("awake"));
+// console.log("BotIsAwake", botIsAwake);
+// console.log("Current", current);
 
 document.addEventListener("DOMContentLoaded", () => {
   botIsAwake ? bulb.classList.remove("d-none") : bulb.classList.add("d-none");
@@ -30,6 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
   whichTurn(current);
   handleOpponentToggler();
   handleAudioSettings();
+  botIsAwake && current === player2 && botMove();
 });
 
 function generateGameboard() {
@@ -43,12 +47,36 @@ function generateGameboard() {
   }
 }
 
-function setCell(event) {
-  if (event.target.textContent !== "" || gameOver) return;
+function botMove() {
+  thinking = true;
   ++moves;
-  event.target.textContent = current;
+  const botCell = chooseCell();
+  setTimeout(() => {
+    botCell.textContent = player2;
+    botCell.classList.add("fade-in");
+    checkWinner();
+    updateCurrent();
+    thinking = false;
+  }, Math.random() * 888 + 666);
+}
+
+function setCell(event) {
+  if (event.target.textContent !== "" || thinking || gameOver) return;
+  ++moves;
+  event.target.classList.add("fade-in");
+  if (current === player1) {
+    event.target.textContent = player1;
+  } else if (current === player2) {
+    if (botIsAwake) {
+      botMove();
+    } else {
+      event.target.textContent = player2;
+    }
+  }
+
   checkWinner();
   updateCurrent();
+  botIsAwake && current === player2 && botMove();
 }
 
 function loadUsernames() {
@@ -100,13 +128,15 @@ function checkWinner() {
     ) {
       gameOver = true;
       updateScore(cells[array[0]].textContent);
-      return setTimeout(restart, 2500);
+      highlight(cells[array[0]], cells[array[1]], cells[array[2]]);
+      return setTimeout(restart, restartDelay);
     }
   }
   if (moves === THREE * THREE && !gameOver) {
     gameOver = true;
     updateScore(tieScore);
-    setTimeout(restart, 2500);
+    highlight(...cells);
+    setTimeout(restart, restartDelay);
   }
 }
 
@@ -133,15 +163,33 @@ function updateScore(winner) {
   }
 }
 
+function highlight(...pieces) {
+  pieces.forEach((piece) => {
+    piece.style.color = "#ff6600";
+  }, restartDelay);
+}
+
 function restart() {
   const usedCells = Array.from(
     document.querySelectorAll(".gameboard .cell")
   ).filter((cell) => cell.textContent !== "");
-  usedCells.forEach((cell) => (cell.textContent = ""));
-  gameOver = false;
-  moves = 0;
-  current = [player1, player2][Math.floor(Math.random() * 2)];
-  whichTurn(current);
+  usedCells.forEach((cell) => {
+    cell.classList.replace("fade-in", "fade-out");
+    setTimeout(() => {
+      cell.classList.remove("fade-out");
+      cell.textContent = "";
+      if (cell.hasAttribute("style")) {
+        cell.removeAttribute("style");
+      }
+    }, 900);
+  });
+  setTimeout(() => {
+    gameOver = false;
+    moves = 0;
+    current = [player1, player2][Math.floor(Math.random() * 2)];
+    whichTurn(current);
+    botIsAwake && current === player2 && botMove();
+  }, 1000);
 }
 
 function handleOpponentToggler() {
@@ -150,6 +198,7 @@ function handleOpponentToggler() {
     botIsAwake = !botIsAwake;
     localStorage.setItem("awake", botIsAwake);
     loadUsernames();
+    botIsAwake && current === player2 && botMove();
   });
 }
 
