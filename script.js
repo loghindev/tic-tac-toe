@@ -11,20 +11,15 @@ const bulb = document.querySelector(".bulb");
 const audioContainer = document.querySelector(".audio-icons-wrapper");
 const unmuted = document.querySelector("#unmuted");
 const muted = document.querySelector("#muted");
-
 const THREE = 3;
 const restartDelay = 2500;
 const player1 = ["X", "O"][Math.floor(Math.random() * 2)];
 const player2 = player1 === "X" ? "0" : "X";
 let current = [player1, player2][Math.floor(Math.random() * 2)];
-
 let thinking = false;
 let gameOver = false;
 let moves = 0;
 let botIsAwake = localStorage.getItem("awake") === "true" ? true : false;
-// console.log(localStorage.getItem("awake"));
-// console.log("BotIsAwake", botIsAwake);
-// console.log("Current", current);
 
 document.addEventListener("DOMContentLoaded", () => {
   botIsAwake ? bulb.classList.remove("d-none") : bulb.classList.add("d-none");
@@ -73,7 +68,6 @@ function setCell(event) {
       event.target.textContent = player2;
     }
   }
-
   checkWinner();
   updateCurrent();
   botIsAwake && current === player2 && botMove();
