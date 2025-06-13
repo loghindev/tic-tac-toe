@@ -1,4 +1,5 @@
 const gameboard = document.querySelector(".gameboard");
+const startBtn = document.querySelector("#startBtn");
 const p1Name = document.querySelector(".scoreboard .player-1 .name");
 const p2Name = document.querySelector(".scoreboard .player-2 .name");
 const p1Spinner = document.querySelector(".scoreboard .player-1 .spinner");
@@ -18,17 +19,44 @@ const player2 = player1 === "X" ? "0" : "X";
 let current = [player1, player2][Math.floor(Math.random() * 2)];
 let thinking = false;
 let gameOver = false;
+let gameStarted = false;
 let moves = 0;
 let botIsAwake = localStorage.getItem("awake") === "true" ? true : false;
 
+const p1Bubble = new Audio("./effects/bubble-1.mp3");
+const p2Bubble = new Audio("./effects/bubble-2.mp3");
+const winnerBubble1 = new Audio("./effects/winner-bubble-1.mp3");
+const winnerBubble2 = new Audio("./effects/winner-bubble-2.mp3");
+const winnerBubble3 = new Audio("./effects/winner-bubble-3.mp3");
+const effects = [
+  p1Bubble,
+  p2Bubble,
+  winnerBubble1,
+  winnerBubble2,
+  winnerBubble3,
+];
+
 document.addEventListener("DOMContentLoaded", () => {
-  botIsAwake ? bulb.classList.remove("d-none") : bulb.classList.add("d-none");
   generateGameboard();
   loadUsernames();
-  whichTurn(current);
   handleOpponentToggler();
   handleAudioSettings();
-  botIsAwake && current === player2 && botMove();
+  botIsAwake ? bulb.classList.remove("d-none") : bulb.classList.add("d-none");
+  effects.forEach((effect) => {
+    effect.addEventListener("canplaythrough", () => {});
+    effect.load();
+  });
+  // start game button
+  startBtn.addEventListener("click", () => {
+    startBtn.classList.add("fade-out");
+    runEffect(winnerBubble3); // random choose
+    startBtn.addEventListener("animationend", () => {
+      startBtn.remove();
+      gameStarted = true;
+      whichTurn(current);
+      botIsAwake && current === player2 && botMove();
+    });
+  });
 });
 
 function generateGameboard() {
@@ -49,6 +77,7 @@ function botMove() {
   setTimeout(() => {
     botCell.textContent = player2;
     botCell.classList.add("fade-in");
+    runEffect(p2Bubble);
     checkWinner();
     updateCurrent();
     thinking = false;
@@ -56,16 +85,19 @@ function botMove() {
 }
 
 function setCell(event) {
-  if (event.target.textContent !== "" || thinking || gameOver) return;
+  if (event.target.textContent !== "" || thinking || !gameStarted || gameOver)
+    return;
   ++moves;
   event.target.classList.add("fade-in");
   if (current === player1) {
     event.target.textContent = player1;
+    runEffect(p1Bubble);
   } else if (current === player2) {
     if (botIsAwake) {
       botMove();
     } else {
       event.target.textContent = player2;
+      runEffect(p2Bubble);
     }
   }
   checkWinner();
@@ -122,14 +154,18 @@ function checkWinner() {
     ) {
       gameOver = true;
       updateScore(cells[array[0]].textContent);
-      highlight(cells[array[0]], cells[array[1]], cells[array[2]]);
+      setTimeout(() => {
+        highlight(cells[array[0]], cells[array[1]], cells[array[2]]);
+      }, 250);
       return setTimeout(restart, restartDelay);
     }
   }
   if (moves === THREE * THREE && !gameOver) {
     gameOver = true;
     updateScore(tieScore);
-    highlight(...cells);
+    setTimeout(() => {
+      highlight(...cells);
+    }, 250);
     setTimeout(restart, restartDelay);
   }
 }
@@ -158,8 +194,20 @@ function updateScore(winner) {
 }
 
 function highlight(...pieces) {
-  pieces.forEach((piece) => {
-    piece.style.color = "#ff6600";
+  pieces.forEach((piece, index) => {
+    setTimeout(() => {
+      if (index === 1 && pieces.length === 3) runEffect(winnerBubble1);
+      else if (index === 2 && pieces.length === 3) runEffect(winnerBubble2);
+      else if (index === 3 && pieces.length === 3) runEffect(winnerBubble3);
+      else {
+        runEffect(
+          [p1Bubble, p2Bubble, winnerBubble1, winnerBubble2, winnerBubble3][
+            Math.floor(Math.random() * 3)
+          ]
+        );
+      }
+      piece.style.color = "#ff6600";
+    }, 250 * index);
   }, restartDelay);
 }
 
@@ -207,4 +255,10 @@ function chooseCell() {
     document.querySelectorAll(".gameboard .cell")
   ).filter((cell) => cell.textContent === "");
   return availableCells[Math.floor(Math.random() * availableCells.length)];
+}
+
+function runEffect(effect) {
+  if (unmuted.classList.contains("d-none")) return;
+  effect.currentTime = 0;
+  effect.play();
 }
