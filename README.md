@@ -1,8 +1,7 @@
 # Tic Tac Toe
 
 
-<img src="https://cdn-icons-png.flaticon.com/512/3405/3405019.png" align="right"
-     alt="Size Limit logo by Anton Lovchikov" width="120" height="178">
+<img src="https://cdn-icons-png.flaticon.com/512/3405/3405019.png" align="right" width="120" height="178">
 
 The game have 2 modes: `1v1` and `vs Computer`  
 
