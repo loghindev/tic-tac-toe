@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Bungee&display=swap");
 * {
   margin: 0;
   padding: 0;
@@ -8,13 +9,52 @@ body {
   height: 100vh;
   background-color: #121414;
   color: white;
+  font-family: "Bungee", sans-serif;
 }
 
-.gameboard {
+header {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px;
+}
+
+header .opponents {
+  display: flex;
+  align-items: center;
+  column-gap: 20px;
+}
+
+header .opponents p,
+header .audio > * {
+  cursor: pointer;
+}
+
+header .opponents p::after {
+  content: "";
+  display: block;
+  width: 0;
+  height: 2px;
+  background-color: white;
+  transition: width 0.4s ease;
+}
+
+header .opponents p:hover::after {
+  width: 20%;
+}
+
+header .opponents p.active-opponent::after {
+  width: 100%;
+}
+/* ----- game ------- */
+
+#game {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.gameboard {
   width: 456px;
   height: 456px;
   display: flex;
@@ -58,12 +98,88 @@ body {
   border-width: 3px 0 0 3px;
 }
 
+/* ----- scoreboard ----- */
+.scoreboard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.scoreboard > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 1.2em;
+}
+
+.scoreboard .wrapper {
+  display: flex;
+  align-items: center;
+  column-gap: 8px;
+}
+
+.loader {
+  width: 25px;
+  height: 25px;
+  display: inline-block;
+  position: relative;
+  transition: opacity 0.25s ease;
+}
+
+.loader::after,
+.loader::before {
+  content: "";
+  box-sizing: border-box;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #fff;
+  position: absolute;
+  left: 0;
+  top: 0;
+  animation: animloader 2.2s linear infinite;
+}
+
+.loader::after {
+  opacity: 0;
+  animation-delay: 1s;
+}
+
+/* ----- utility classes ------ */
 .fade-in {
   animation: fade-in 0.15s ease;
+}
+
+.hidden {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.animate-score {
+  animation: animate-score 0.5s 4 ease;
 }
 
 @keyframes fade-in {
   from {
     font-size: 0.5em;
+  }
+}
+
+@keyframes animloader {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+@keyframes animate-score {
+  50% {
+    opacity: 0.3;
+    transform: scale(1.2);
   }
 }
