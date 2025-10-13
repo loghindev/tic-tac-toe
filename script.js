@@ -23,6 +23,9 @@ document.addEventListener("DOMContentLoaded", () => {
   setScoreboard();
   setGameboard();
   handleInteractions();
+  if (opponent === "computer" && current === player2) {
+    computerMove();
+  }
 });
 
 function updatePlayersNames() {
@@ -56,10 +59,11 @@ function setGameboard() {
     for (let c = 0; c < THREE; ++c) {
       const newCell = document.createElement("div");
       newCell.classList = "cell";
+      newCell.setAttribute("draggable", "false");
       gameboard.appendChild(newCell);
     }
   }
-  gameboard.addEventListener("mousedown", setPiece);
+  gameboard.addEventListener("mouseup", setPiece);
 }
 
 function setPiece(event) {
@@ -67,6 +71,26 @@ function setPiece(event) {
   event.target.textContent = current;
   event.target.classList.add("fade-in");
   current === player1 ? runEffect(pop1) : runEffect(pop2);
+  ++moves;
+  checkWinner();
+  if (!gameOver) {
+    updateCurrent();
+    updateSpinner();
+  }
+  if (opponent === "computer" && current === player2) {
+    console.log("Computer Turn");
+    setTimeout(computerMove, Math.random() * 1000 + 333);
+  }
+}
+
+function computerMove() {
+  const leftCells = document.querySelectorAll(".gameboard .cell:not(.fade-in)");
+  const choseCell = leftCells.item(
+    Math.floor(Math.random() * leftCells.length)
+  );
+  choseCell.textContent = current;
+  choseCell.classList.add("fade-in");
+  runEffect(pop2);
   ++moves;
   checkWinner();
   if (!gameOver) {
