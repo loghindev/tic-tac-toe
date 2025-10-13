@@ -71,6 +71,7 @@ header .opponents p.active-opponent::after {
   align-items: center;
   font-size: 7em;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 .gameboard .cell:nth-child(1) {
   border-width: 0 3px 3px 0;
@@ -158,6 +159,10 @@ header .opponents p.active-opponent::after {
 
 .animate-score {
   animation: animate-score 0.5s 4 ease;
+}
+
+.blink {
+  background-color: rgb(107, 44, 178);
 }
 
 @keyframes fade-in {

@@ -87,12 +87,12 @@ function checkWinner() {
       cells[array[1]].textContent === cells[array[2]].textContent &&
       cells[array[0]].textContent !== ""
     ) {
-      return endGame();
+      return endGame(cells[array[0]], cells[array[1]], cells[array[2]]);
     }
   }
   // TIE
   if (moves === THREE * THREE && !gameOver) {
-    endGame("tie");
+    endGame(...cells);
   }
 }
 
@@ -108,15 +108,31 @@ function animateScore(score) {
   });
 }
 
-function endGame(status) {
+function animateGamePieces(pieces) {
+  pieces.forEach((piece, index) =>
+    setTimeout(
+      () => {
+        piece.classList.add("blink");
+        runEffect([pop1, pop2, pop3][Math.floor(Math.random() * 3)]);
+      },
+      pieces.length === THREE * THREE ? 120 * index : 300 * index
+    )
+  );
+}
+
+function endGame(...pieces) {
   setTimeout(restartGame, 2500);
+  setTimeout(() => {
+    animateGamePieces(pieces);
+  }, 300);
   gameOver = true;
-  if (status === "tie") {
-    return increment(tieScore), animateScore(tieScore);
+  if (pieces.length === THREE * THREE) {
+    increment(tieScore), animateScore(tieScore);
+  } else {
+    current === player1
+      ? (increment(player1Score), animateScore(player1Score))
+      : (increment(player2Score), animateScore(player2Score));
   }
-  current === player1
-    ? (increment(player1Score), animateScore(player1Score))
-    : (increment(player2Score), animateScore(player2Score));
 }
 
 function restartGame() {
@@ -149,7 +165,7 @@ function handleInteractions() {
   handleSwitchOpponents();
   handleSwitchAudio();
 }
-
+// localStorage.clear();
 function handleSwitchOpponents() {
   const opponents = document.querySelector("header .opponents");
   // initial behavior - when page loads
@@ -160,6 +176,8 @@ function handleSwitchOpponents() {
   }
   // click events
   opponents.addEventListener("click", (event) => {
+    // fixed: accidentally clicking on parent node 'div.opponents'
+    if (event.target.classList.contains("opponents")) return;
     [...opponents.children].forEach((type) =>
       type.classList.remove("active-opponent")
     );
