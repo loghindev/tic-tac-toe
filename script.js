@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setGameboard();
   handleInteractions();
   if (opponent === "computer" && current === player2) {
-    computerMove();
+    setTimeout(computerMove, Math.random() * 1000 + 800);
   }
 });
 
@@ -68,6 +68,13 @@ function setGameboard() {
 
 function setPiece(event) {
   if (event.target.textContent !== "" || gameOver) return;
+  if (opponent === "computer" && current === player2) {
+    event.target.classList.add("unavailable");
+    event.target.addEventListener("animationend", () => {
+      event.target.classList.remove("unavailable");
+    });
+    return;
+  }
   event.target.textContent = current;
   event.target.classList.add("fade-in");
   current === player1 ? runEffect(pop1) : runEffect(pop2);
@@ -166,6 +173,9 @@ function restartGame() {
   current = [player1, player2][Math.floor(Math.random() * 2)];
   setScoreboard();
   setGameboard();
+  if (opponent === "computer" && current === player2) {
+    setTimeout(computerMove, Math.random() * 1000 + 500);
+  }
 }
 function runEffect(sound) {
   if (!audio) return;

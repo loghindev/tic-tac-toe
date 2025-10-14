@@ -158,11 +158,15 @@ header .opponents p.active-opponent::after {
 }
 
 .animate-score {
-  animation: animate-score 0.5s 4 ease;
+  animation: animate-score 0.5s 6 ease;
 }
 
 .blink {
   background-color: rgb(107, 44, 178);
+}
+
+.unavailable {
+  animation: unavailable-cell 0.09s 2 ease;
 }
 
 @keyframes fade-in {
@@ -184,7 +188,13 @@ header .opponents p.active-opponent::after {
 
 @keyframes animate-score {
   50% {
-    opacity: 0.3;
-    transform: scale(1.2);
+    opacity: 0.2;
+    transform: scale(1.5);
+  }
+}
+
+@keyframes unavailable-cell {
+  50% {
+    background-image: linear-gradient(to left, red, rgb(239, 46, 46));
   }
 }
