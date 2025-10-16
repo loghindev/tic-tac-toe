@@ -220,6 +220,10 @@ function handleSwitchOpponents() {
     opponent = opponentToSet;
     localStorage.setItem("opponent", opponentToSet);
     updatePlayersNames();
+    // check if is computer's turn right after changing the opponent type
+    if (opponent === "computer" && current === player2) {
+      setTimeout(computerMove, Math.random() * 1000 + 800);
+    }
   });
 }
 
