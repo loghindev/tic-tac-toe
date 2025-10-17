@@ -198,3 +198,22 @@ header .opponents p.active-opponent::after {
     background-image: linear-gradient(to left, red, rgb(239, 46, 46));
   }
 }
+
+/* ----- responsive layouts ------ */
+
+@media screen and (max-width: 500px) {
+  .gameboard {
+    width: 306px;
+    height: 306px;
+  }
+
+  .gameboard .cell {
+    width: 102px;
+    height: 102px;
+    font-size: 5em;
+  }
+
+  .scoreboard > div {
+    font-size: 0.8em;
+  }
+}
